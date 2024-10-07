@@ -1,4 +1,3 @@
-import { useLocation } from "react-router-dom";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
@@ -6,7 +5,6 @@ import { createCategory, getCategories } from "../request";
 import { useSelector } from "react-redux"; // Import Redux hooks
  
 const Categories = () => {
-  const { search } = useLocation();
   const [categories, setCategories] = useState([]); // State for categories
   const [categoryDescription, setCategoryDescription] = useState(""); // Input for new category
   const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
@@ -35,10 +33,7 @@ const Categories = () => {
   // Fetch posts and categories when component mounts or user/search changes
   useEffect(() => {
     fetchCategories();
-  }, [search, user]);
-
-
-  console.log("categories:",categories)
+  }, [user]);
 
   return (
     <div>
