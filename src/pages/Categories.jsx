@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 import { useEffect, useState } from "react";
 import { createCategory, getCategories } from "../request";
 import { useSelector } from "react-redux"; // Import Redux hooks
-
+ 
 const Categories = () => {
   const { search } = useLocation();
   const [categories, setCategories] = useState([]); // State for categories
