@@ -4,8 +4,8 @@ import Navbar from "../components/Navbar"
 import { Link } from "react-router-dom"
 import Loader from '../components/Loader'
 import { useSelector } from "react-redux";
-import { postSelectors } from "../features/postSlice.js";
-import { resetGetPostsStatus } from "../features/postSlice.js"
+import { postSelectors } from "../features/postDataSlice.js";
+import { resetGetPostsStatus } from "../features/postDataSlice.js"
 import { useEffect } from "react"
 import { useDispatch } from "react-redux"
 

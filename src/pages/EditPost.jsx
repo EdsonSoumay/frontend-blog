@@ -2,12 +2,12 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { handleEditPost, handleUploadFile, resetEditPostStatus } from "../features/postSlice";
+import { handleEditPost, handleUploadFile, resetEditPostStatus } from "../features/postDataSlice";
 import PostForm from "../components/PostForm";
 import { Formik, Form } from "formik";
 import { PostValidationSchema, PostInitialValues } from "../functions/PostHelper";
 import SubmitButton from "../components/SubmitButton";
-import { handleGetPost } from "../features/postSlice";
+import { handleGetPost } from "../features/postDataSlice";
 import { useEffect } from "react";
 
 const EditPost = () => {
@@ -71,15 +71,28 @@ const EditPost = () => {
     <div>
       <Navbar />
       <div className="px-6 md:px-[200px] mt-8">
-        <h1 className="font-bold md:text-2xl text-xl ">Update a post</h1>
-        <Formik initialValues={PostInitialValues({title: post?.title, desc: post?.desc, file:post?.photo, category_id: post?.category_id})} validationSchema={PostValidationSchema} onSubmit={handleUpdate}>
-          {(formProps) => (
-             <Form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
-              <PostForm formProps={formProps}/>
-              <SubmitButton status={editPostStatus} errorMessage={editPostErrorMessage}/>
-            </Form>
-          )}
-        </Formik>
+        <h1 className="font-bold md:text-2xl text-xl">Update a post</h1>
+        {post ? (
+          <Formik
+            initialValues={PostInitialValues({
+              title: post?.title || "",
+              desc: post?.desc || "",
+              file: post?.photo || null,
+              category_id: post?.category_id || "",
+            })}
+            validationSchema={PostValidationSchema}
+            onSubmit={handleUpdate}
+          >
+            {(formProps) => (
+              <Form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
+                <PostForm formProps={formProps} />
+                <SubmitButton status={editPostStatus} errorMessage={editPostErrorMessage} />
+              </Form>
+            )}
+          </Formik>
+        ) : (
+          <div>Loading...</div>
+        )}
       </div>
       <Footer />
     </div>

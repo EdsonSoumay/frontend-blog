@@ -36,7 +36,7 @@ export const deleteProfileUser = async(user_id)=>{
    const result = await axios.delete(URL+"/api/users/"+user_id,{withCredentials:true})
    return result.data;
 }
-
+//=======================================================================================================
 
 //post 
 export const getPostsByUser = async(user_id)=>{
@@ -109,35 +109,85 @@ export const editPost = async({post_id, post})=>{
 }
 
 export const deletePost = async(post_id)=>{
-    const result = await axios.delete(URL+"/api/posts/"+post_id,{withCredentials:true})
-    return result.data
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result = await axios.delete(URL+"/api/posts/"+post_id,{withCredentials:true})
+        resolve(result.data); // Mengembalikan data produk
+      } catch (error) {
+        reject(error); // Menangani error jika permintaan gagal
+      }
+    }, 1500); // Simulasi keterlambatan 1.5 detik
+  });
 }
+//=======================================================================================================
 
 
 //comment
 export const getComments = async(post_id)=>{
-    const result = await axios.get(URL+"/api/comments/post/"+post_id, {withCredentials:true})
-    return result.data
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result = await axios.get(URL+"/api/comments/post/"+post_id, {withCredentials:true})
+          resolve(result.data); // Mengembalikan data produk
+        } catch (error) {
+          reject(error); // Menangani error jika permintaan gagal
+        }
+      }, 2500); // Simulasi keterlambatan 5.5 detik
+    });
 }
 
 export const createComment = async (data)=>{
-    const result =  await axios.post(URL+"/api/comments/create", data, {withCredentials:true})
-    return result.data
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result =  await axios.post(URL+"/api/comments/create", data, {withCredentials:true})
+        resolve(result.data); // Mengembalikan data produk
+      } catch (error) {
+        reject(error); // Menangani error jika permintaan gagal
+      }
+    }, 2500); // Simulasi keterlambatan 1.5 detik
+  });
 }
 
 export const deleteComment = async (commentId)=>{
-    const result =  await axios.delete(URL+"/api/comments/"+commentId,{withCredentials:true})
-    return result.data
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result =  await axios.delete(URL+"/api/comments/"+commentId,{withCredentials:true})
+          resolve(result.data); // Mengembalikan data produk
+        } catch (error) {
+          reject(error.response.data); // Menangani error jika permintaan gagal
+        }
+      }, 10000); // Simulasi keterlambatan 10 detik
+    });
 }
+//=======================================================================================================
 
 
 //category
 export const getCategories = async()=>{
-    const result = await axios.get(URL + "/api/category", { withCredentials: true });
-    return result.data;
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result = await axios.get(URL + "/api/category", { withCredentials: true });
+          resolve(result.data); // Mengembalikan data produk
+        } catch (error) {
+          reject(error); // Menangani error jika permintaan gagal
+        }
+      }, 1500); // Simulasi keterlambatan 1.5 detik
+    });
 }
 
 export const createCategory = async(data)=>{
-    const result = await axios.post(URL + "/api/category/create",data,{ withCredentials: true });
-    return result.data;
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result = await axios.post(URL + "/api/category/create",data,{ withCredentials: true });
+          resolve(result.data); // Mengembalikan data produk
+        } catch (error) {
+          reject(error); // Menangani error jika permintaan gagal
+        }
+      }, 1500); // Simulasi keterlambatan 1.5 detik
+    });
 }

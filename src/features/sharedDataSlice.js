@@ -4,7 +4,7 @@ const initialState = {
   searchQuery: "", // Menyimpan kata kunci pencarian
 };
 
-const searchSlice = createSlice({
+const sharedDataSlice = createSlice({
   name: "sharedData",
   initialState,
   reducers: {
@@ -15,7 +15,7 @@ const searchSlice = createSlice({
 });
 
 // Export actions untuk digunakan di komponen
-export const { setSearchQuery } = searchSlice.actions;
+export const { setSearchQuery } = sharedDataSlice.actions;
 
 // Export reducer untuk diintegrasikan di store
-export default searchSlice.reducer;
+export default sharedDataSlice.reducer;

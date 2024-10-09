@@ -9,7 +9,7 @@ import Profile from './pages/Profile';
 import MyBlogs from './pages/MyBlogs';
 import Categories from './pages/Categories';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleGetPosts } from './features/postSlice';
+import { handleGetPosts } from './features/postDataSlice';
 import { useEffect } from 'react';
 import { fetchUserData } from './features/userDataSlice'; // Import aksi fetchUserData
 

@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleCreatePost, handleUploadFile, resetCreatePostStatus } from '../features/postSlice';
+import { handleCreatePost, handleUploadFile, resetCreatePostStatus } from '../features/postDataSlice';
 import { Formik } from 'formik';
 import PostForm from '../components/PostForm';
 import { PostValidationSchema, PostInitialValues } from '../functions/PostHelper';

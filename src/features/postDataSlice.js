@@ -17,7 +17,7 @@ const postEntity = createEntityAdapter({
   selectId: (post) => post.id,
 });
 
-const postSlice = createSlice({
+const postDataSlice = createSlice({
   name: "postData",
   initialState: {
     ...postEntity.getInitialState(),
@@ -29,7 +29,9 @@ const postSlice = createSlice({
     createPostErrorMessage: null,
     deletePostErrorMessage: null,
     editPostErrorMessage: null,
-    getPostsDetail:{}
+    getPostsDetail:{}, // untuk get post secara satu per satu
+    getPostsDetailStatus:{}, // untuk get post secara satu per satu
+    getPostsDetailErrorMessage:{} // untuk get post secara satu per satu
   },
   reducers: {
     resetCreatePostStatus: (state) => {
@@ -51,22 +53,19 @@ const postSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder // untuk menangani aksi asyncrhonus
-    
       //aksi get post
       .addCase(handleGetPost.pending, (state, action) => {
-        state.getPostsStatus = 'loading';
+        state.getPostsDetailStatus[action.meta.arg] = 'loading'; // tidak bisa karena ketika loading data payload blum ada
       })
       .addCase(handleGetPost.fulfilled, (state, action) => {
-        // console.log("action payload:",action.payload)
-        state.getPostsDetail[action.payload.id] = action.payload;
+        state.getPostsDetailStatus[action.meta.arg] = 'succeeded';
+        state.getPostsDetail[action.meta.arg] = action.payload;
       })
       .addCase(handleGetPost.rejected, (state, action) => {
-        state.getPostsStatus = 'failed';
-        state.getPostsErrorMessage = action.error.message;
+        state.getPostsDetailStatus[action.meta.arg] = 'failed';
+        state.getPostsDetailErrorMessage[action.meta.arg] = action.error.message;
       })
-
           
-
       //aksi get posts
       .addCase(handleGetPosts.pending, (state, action) => {
         state.getPostsStatus = 'loading';
@@ -125,11 +124,10 @@ const postSlice = createSlice({
 
 export const postSelectors = postEntity.getSelectors(
   (state) => {
-    console.log("state.postData:",state.postData)
     return state.postData
   }
 );
 
-export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus } = postSlice.actions;
+export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus } = postDataSlice.actions;
 
-export default postSlice.reducer;
+export default postDataSlice.reducer;
