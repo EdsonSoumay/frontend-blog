@@ -20,6 +20,7 @@ const EditPost = () => {
   const editPostStatus = useSelector((state) => state.postData.editPostStatus);
   const editPostStatusMessage = useSelector((state) => state.postData.editPostStatusMessage);
 
+
   const handleUpdate = async (values) => {
     const { title, desc, category_id, file } = values;
     const post = { title, desc, user_id: user.id, category_id: parseInt(category_id)};
@@ -59,7 +60,7 @@ const EditPost = () => {
       if (handleEditPost.fulfilled.match(resultAction)){
         // console.log("Produk berhasil disimpan:", resultAction.payload);
           setTimeout(() => {
-            navigate("/"); // Kembali ke halaman utama jika sukses
+            // navigate("/"); // Kembali ke halaman utama jika sukses
             dispatch(resetEditPostStatus());
           }, 2000);
       }
@@ -99,7 +100,7 @@ const EditPost = () => {
           >
             {(formProps) => (
               <Form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
-                <PostForm formProps={formProps} />
+                <PostForm formProps={formProps}/>
                 <SubmitButton status={editPostStatus} statusMessage={editPostStatusMessage} />
               </Form>
             )}

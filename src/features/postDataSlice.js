@@ -26,13 +26,13 @@ const postDataSlice = createSlice({
     getPostsStatus: 'idle',
     getPostsByUserStatus: 'idle',
     createPostStatus: 'idle',
-    createPostImageStatus: 'idle',
+    postImageStatus: 'idle',
     deletePostStatus: 'idle',
     editPostStatus: 'idle',
     getPostsByUserStatusMessage: null,
     getPostsStatusMessage: null,
     createPostStatusMessage: null,
-    createPostImageStatusMessage: null,
+    postImageStatusMessage: null,
     deletePostStatusMessage: null,
     editPostStatusMessage: null,
     getPostsDetail:{}, // untuk get post secara satu per satu
@@ -152,16 +152,15 @@ const postDataSlice = createSlice({
 
       // Aksi `upload file`
       .addCase(handleUploadFile.pending, (state) => {
-        state.createPostImageStatus = 'loading';
+        state.postImageStatus = 'loading';
       })
       .addCase(handleUploadFile.fulfilled, (state, action) => {
-        state.createPostImageStatus = 'succeeded';
-        state.getPostsStatus = 'idle';
-        state.createPostImageStatusMessage = action.payload.message;
+        state.postImageStatus = 'succeeded';
+        state.postImageStatusMessage = action.payload.message;
       })
       .addCase(handleUploadFile.rejected, (state, action) => {
-        state.createPostImageStatus = 'failed';
-        state.createPostImageStatusMessage = action.error.message;
+        state.postImageStatus = 'failed';
+        state.postImageStatusMessage = action.error.message;
       })
   },
 });

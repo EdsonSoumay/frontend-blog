@@ -1,8 +1,7 @@
 
-const SubmitButton = ({status, statusMessage}) => {
+const SubmitButton = ({status, statusMessage, }) => {
   const isSubmitting = status === 'loading';  // Mengganti isSubmitting dengan status dari Redux
   const isSuccess = status === 'succeeded'; // Mengambil status sukses
-  console.log("status message:",statusMessage)
 
   return (
     <div className="field">

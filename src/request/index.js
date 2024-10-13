@@ -54,7 +54,7 @@ export const refetch = async()=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 1000);
+      }, 1);
     });
 }
 
@@ -161,7 +161,7 @@ export const uploadFile = async(data)=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 1500);
+      }, 1);
     });
 }
 
@@ -175,7 +175,7 @@ export const createPost = async(post)=>{
             const errorResponse = error?.response?.data?.message || error.message;
             reject(errorResponse);
           }
-        }, 1500);
+        }, 1);
       });
 }
 

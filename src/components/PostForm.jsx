@@ -3,9 +3,10 @@ import {Fragment } from 'react';
 import { categorySelectors } from "../features/categoryDataSlice";
 import { useSelector } from 'react-redux';
 
-const PostForm = ({ formProps }) => {
+const PostForm = ({ formProps}) => {
   const categories = useSelector(categorySelectors.selectAll);
-  
+  const postImageStatusMessage = useSelector((state) => state.postData.postImageStatusMessage);
+
   return (
   <Fragment>
     {/* Title Field */}
@@ -38,7 +39,7 @@ const PostForm = ({ formProps }) => {
           className="text-red-500 text-sm"
         />
       </div>
-
+      {postImageStatusMessage && <p>{postImageStatusMessage}</p>}
       <div className="flex-1">
         <Field
           as="select"

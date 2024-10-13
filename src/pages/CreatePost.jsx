@@ -11,11 +11,9 @@ import { Form } from 'formik';
 
 const CreatePost = () => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
-  console.log("user:",user)
-
   const navigate = useNavigate();
 
+  const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
   const createPostStatus = useSelector((state) => state.postData.createPostStatus);
   const createPostStatusMessage = useSelector((state) => state.postData.createPostStatusMessage);
 
@@ -81,8 +79,8 @@ const CreatePost = () => {
         <Formik initialValues={PostInitialValues({title:'title1', desc:'des sekian', file:'', category_id:5})} validationSchema={PostValidationSchema} onSubmit={handleCreate}>
           {(formProps) => (
            <Form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
-            <PostForm formProps={formProps} />
-            <SubmitButton status={createPostStatus} statusMessage={createPostStatusMessage}/>
+            <PostForm formProps={formProps}/>
+            <SubmitButton status={createPostStatus} statusMessage={createPostStatusMessage} />
            </Form>
           )}
         </Formik>
