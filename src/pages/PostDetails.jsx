@@ -24,18 +24,18 @@ const PostDetails = () => {
   
   //post data redux
   const post = useSelector((state) => state.postData.getPostsDetail[post_id]);
-  const getPostStatus = useSelector((state) => state.postData.getPostsDetailStatus[post_id]);
-  const getPostErrorMessage = useSelector((state) => state.postData.getPostsDetailErrorMessage[post_id]);
+  const getPostDetailStatus = useSelector((state) => state.postData.getPostsDetailStatus[post_id]);
+  const getPostDetailStatusMessage = useSelector((state) => state.postData.getPostsDetailStatusMessage[post_id]);
   const deletePostStatus = useSelector((state) => state.postData.deletePostStatus);
-  const deletePostErrorMessage = useSelector((state) => state.postData.deletePostErrorMessage);
+  const deletePostStatusMessage = useSelector((state) => state.postData.deletePostStatusMessage);
   const isDeletingOrDeletedPost = deletePostStatus === 'loading' || deletePostStatus === 'succeeded';
 
   //comment data redux
   const comments = useSelector((state) => selectCommentsByPostId(state, post_id));
   const getCommentsStatus =  useSelector((state) => state.commentData.getCommentsStatus[post_id]);
-  const getCommentsErrorMessage = useSelector((state) => state.commentData.getCommentsErrorMessage[post_id]);
+  const getCommentsStatusMessage = useSelector((state) => state.commentData.getCommentsStatusMessage[post_id]);
   const createCommentsStatus =  useSelector((state) => state.commentData.createCommentStatus);
-  const deleteCommentErrorMessage = useSelector((state) => state.commentData.deleteCommentErrorMessage);
+  const deleteCommentStatusMessage = useSelector((state) => state.commentData.deleteCommentStatusMessage);
 
   const deletePost=async ()=>{
     try {
@@ -89,11 +89,11 @@ const PostDetails = () => {
     <div>
         <Navbar/>
         {
-         getPostStatus  === 'loading'?
+         getPostDetailStatus  === 'loading'?
           <div className="h-[80vh] flex justify-center items-center w-full"><Loader/></div>
           :
-          getPostErrorMessage ?
-          <p className="text-red-500 text-center">{getPostErrorMessage}</p>
+          getPostDetailStatus === 'failed' && getPostDetailStatusMessage ?
+          <p className="text-red-500 text-center">{getPostDetailStatusMessage}</p>
           :
           <div className="px-8 md:px-[200px] mt-8">
             <div className="flex justify-between items-center">
@@ -113,7 +113,7 @@ const PostDetails = () => {
                   </button>
 
                   {/* Pesan jika ada error */}
-                  {deletePostErrorMessage && <p className="text-red-500">{deletePostErrorMessage}</p>}
+                  {deletePostStatusMessage && <p className="text-red-500">{deletePostStatusMessage}</p>}
                   </div>
                 }
               </div>
@@ -138,15 +138,15 @@ const PostDetails = () => {
               {
               getCommentsStatus === 'loading' ? (
                <p className="text-gray-500">Loading comments...</p>
-              ) : getCommentsErrorMessage ? (
-              <p className="text-red-500">{getCommentsErrorMessage}</p>
+              ) : getCommentsStatusMessage &&  getCommentsStatus === 'failed' ? (
+              <p className="text-red-500">{getCommentsStatusMessage}</p>
               ) : (
               comments?.map((c) => (
                 <Comment key={c.id} c={c} post={post} />
               )))
               }
-               {deleteCommentErrorMessage && (
-                      <p className="text-red-500">{deleteCommentErrorMessage}</p>
+               {deleteCommentStatusMessage && (
+                      <p className="text-red-500">{deleteCommentStatusMessage}</p>
                     )}
           </div>
 

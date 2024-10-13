@@ -2,15 +2,26 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"; // Import Redux hooks
 import { Link, useNavigate } from "react-router-dom";
 import { logout as logoutRequest } from "../request"; // Sesuaikan import logout jika diperlukan
-import { clearUserData } from "../features/userDataSlice";
+import { clearUserData, handleLogout, resetLogoutStatus} from "../features/userDataSlice";
 
 const Menu = () => {
   const dispatch = useDispatch(); // Inisialisasi useDispatch
   const navigate = useNavigate();
   const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
 
-  const handleLogout = async () => {
+  const handleLogoutFunction = async () => {
     try {
+      const resultAction = await dispatch(handleLogout());
+      if (handleLogout.fulfilled.match(resultAction)) {
+          dispatch(clearUserData()); // Dispatch action untuk menghapus user dari Redux store
+          dispatch(resetLogoutStatus());
+          navigate("/login")
+      } else if (handleLogout.rejected.match(resultAction)) {
+        setTimeout(() => {
+          dispatch(resetLogoutStatus());
+        }, 2000);
+      }
+      
       await logoutRequest(); // Panggil fungsi logout
       dispatch(clearUserData()); // Dispatch action untuk menghapus user dari Redux store
       navigate("/login");
@@ -53,7 +64,7 @@ const Menu = () => {
       )}
       {user && (
         <h3
-          onClick={handleLogout}
+          onClick={handleLogoutFunction}
           className="text-white text-sm hover:text-gray-500 cursor-pointer"
         >
           Logout

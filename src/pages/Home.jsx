@@ -11,10 +11,10 @@ import { useDispatch } from "react-redux"
 
 const Home = () => {
   const dispatch = useDispatch();
-  const products = useSelector(postSelectors.selectAll);
+  const post = useSelector(postSelectors.selectAll);
   const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
   const getPostsStatus = useSelector((state) => state.postData.getPostsStatus);
-  const getPostsErrorMessage = useSelector((state) => state.postData.getPostsErrorMessage);
+  const getPostsStatusMessage = useSelector((state) => state.postData.getPostsStatusMessage);
 
   useEffect(() => {
     if(getPostsStatus === 'loading'){
@@ -31,11 +31,11 @@ const Home = () => {
           <div className="h-[40vh] flex justify-center items-center">
             <Loader />
           </div>
-        ) : getPostsErrorMessage ? (
-          <p className="text-center text-red-500">Error: {getPostsErrorMessage}</p>
+        ) : getPostsStatus === 'failed' && getPostsStatusMessage ? (
+          <p className="text-center text-red-500">Error: {getPostsStatusMessage}</p>
         ) : (
-          products.length > 0 ? (
-            products.map((post) => (
+          post.length > 0 ? (
+            post.map((post) => (
               <div key={post.id}>
                 <Link to={user ? `/posts/post/${post.id}` : "/login"}>
                   <HomePosts key={post.id} post={post} />

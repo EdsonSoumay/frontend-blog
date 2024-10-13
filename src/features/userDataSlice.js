@@ -1,47 +1,124 @@
 // userDataSlice.js
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { refetch } from "../request";
+import { refetch, register, login, logout, getProfileUser, updateProfileUser} from "../request";
 
 // Aksi asinkron untuk mengambil data pengguna
-export const fetchUserData = createAsyncThunk("refetch", async () => {
-  const response = await refetch();
-  return response; // Mengembalikan data pengguna
-});
+export const handleRefetchUser = createAsyncThunk("refetch", refetch);
+export const handleRegister = createAsyncThunk("register", register);
+export const handleLogin = createAsyncThunk("login", login);
+export const handleLogout = createAsyncThunk("logout", logout);
+
+export const handleGetProfileUser = createAsyncThunk("getProfileUser", getProfileUser);
+export const handleUpdateProfileUser = createAsyncThunk("updateProfileUser", updateProfileUser);
 
 // Slice untuk data pengguna
 const userDataSlice = createSlice({
   name: "userData",
   initialState: {
     user: null,
-    status: "idle", // idle | loading | succeeded | failed
-    error: null,
+    refetchUserStatus: "idle",
+    registerStatus: 'idle',
+    loginStatus: 'idle',
+    logoutStatus: 'idle',
+    updateProfileUser: 'idle',
+
+    refetchUserStatusMessage: null,
+    registerStatusMessage: null,
+    loginStatusMessage: null,
+    logoutStatusMessage: null,
+    updateProfileUserStatusMessage: null,
   },
   reducers: {
     setUserData: (state, action) => {
-      state.user = action.payload; // Menyimpan pengguna ke dalam state
+      state.user = action.payload.data; // Menyimpan pengguna ke dalam state
     },
     clearUserData: (state) => {
         state.user = null; // Hapus data user dari state
     },
+    resetRegisterStatus: (state) => {
+      state.registerStatus = 'idle';
+      state.registerStatusMessage = null;
+    },
+    resetLoginStatus: (state) => {
+      state.loginStatus = 'idle';
+      state.loginStatusMessage = null;
+    },
+    resetLogoutStatus: (state) => {
+      state.logoutStatus = 'idle';
+      state.logoutStatusMessage = null;
+    },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchUserData.pending, (state) => {
-        state.status = "loading";
+
+      //Register
+      .addCase(handleRegister.pending, (state) => {
+        state.registerStatus = "loading";
       })
-      .addCase(fetchUserData.fulfilled, (state, action) => {
-        state.status = "succeeded";
-        state.user = action.payload; // Menyimpan pengguna
+      .addCase(handleRegister.fulfilled, (state, action) => {
+        state.registerStatus = "succeeded";
+        state.registerStatusMessage = action.payload.message;
       })
-      .addCase(fetchUserData.rejected, (state, action) => {
-        state.status = "failed";
-        state.error = action.error.message; // Menyimpan error jika ada
-      });
+      .addCase(handleRegister.rejected, (state, action) => {
+        state.registerStatus = "failed";
+        state.registerStatusMessage = action.error.message;
+      })
+
+      //Login
+      .addCase(handleLogin.pending, (state) => {
+        state.loginStatus = "loading";
+      })
+      .addCase(handleLogin.fulfilled, (state, action) => {
+        state.loginStatus = "succeeded";
+        state.loginStatusMessage = action.payload.message;
+      })
+      .addCase(handleLogin.rejected, (state, action) => {
+        state.loginStatus = "failed";
+        state.loginStatusMessage = action.error.message;
+      })
+
+      //refetch
+      .addCase(handleRefetchUser.pending, (state) => {
+        state.refetchUserStatus = "loading";
+      })
+      .addCase(handleRefetchUser.fulfilled, (state, action) => {
+        state.refetchUserStatus = "succeeded";
+        state.user = action.payload.data;
+      })
+      .addCase(handleRefetchUser.rejected, (state, action) => {
+        state.refetchUserStatus = "failed";
+        state.refetchUserStatusMessage = action.error.message;
+      })
+
+
+       //Logout
+      .addCase(handleLogout.pending, (state) => {
+        state.logoutStatus = "loading";
+      })
+      .addCase(handleLogout.fulfilled, (state, action) => {
+        state.logoutStatus = "succeeded";
+      })
+      .addCase(handleLogout.rejected, (state, action) => {
+        state.logoutStatus = "failed";
+        state.logoutStatusMessage = action.error.message;
+      })
+
+      //update user
+      .addCase(handleUpdateProfileUser.pending, (state) => {
+        state.updateProfileUser = "loading";
+      })
+      .addCase(handleUpdateProfileUser.fulfilled, (state, action) => {
+        state.updateProfileUser = "succeeded";
+      })
+      .addCase(handleUpdateProfileUser.rejected, (state, action) => {
+        state.updateProfileUser = "failed";
+        state.updateProfileUserStatusMessage = action.error.message;
+      })
   },
 });
 
 // Ekspor aksi
-export const { setUserData, clearUserData } = userDataSlice.actions;
+export const { setUserData, clearUserData, resetRegisterStatus, resetLoginStatus, resetLogoutStatus } = userDataSlice.actions;
 
 // Ekspor reducer
 export default userDataSlice.reducer;

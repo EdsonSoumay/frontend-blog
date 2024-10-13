@@ -2,7 +2,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { handleEditPost, handleUploadFile, resetEditPostStatus } from "../features/postDataSlice";
+import { handleEditPost, handleUploadFile, resetEditPostStatus, resetCreatePostImageStatus } from "../features/postDataSlice";
 import PostForm from "../components/PostForm";
 import { Formik, Form } from "formik";
 import { PostValidationSchema, PostInitialValues } from "../functions/PostHelper";
@@ -18,7 +18,7 @@ const EditPost = () => {
   const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
   const post = useSelector((state) => state.postData.getPostsDetail[post_id]);
   const editPostStatus = useSelector((state) => state.postData.editPostStatus);
-  const editPostErrorMessage = useSelector((state) => state.postData.editPostErrorMessage);
+  const editPostStatusMessage = useSelector((state) => state.postData.editPostStatusMessage);
 
   const handleUpdate = async (values) => {
     const { title, desc, category_id, file } = values;
@@ -33,10 +33,24 @@ const EditPost = () => {
 
       // Image upload
       try {
-        await dispatch(handleUploadFile(data));
-      } catch (err) {
-        console.log(err);
-      }
+        const resultAction = await dispatch(handleUploadFile(data));
+         if (handleUploadFile.fulfilled.match(resultAction)){
+             setTimeout(() => {
+               navigate("/"); // Kembali ke halaman utama jika sukses
+               dispatch(resetCreatePostImageStatus());
+             }, 2000);
+         }
+         // Jika ada error (rejected), tampilkan error dari resultAction
+         else if (handleUploadFile.rejected.match(resultAction)){
+           setTimeout(() => {
+             dispatch(resetCreatePostImageStatus());
+           }, 2000);
+         }
+       } catch (err) {
+         setTimeout(() => {
+           dispatch(resetCreatePostImageStatus());
+         }, 2000);
+       }
     }
 
     // Post update
@@ -86,7 +100,7 @@ const EditPost = () => {
             {(formProps) => (
               <Form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
                 <PostForm formProps={formProps} />
-                <SubmitButton status={editPostStatus} errorMessage={editPostErrorMessage} />
+                <SubmitButton status={editPostStatus} statusMessage={editPostStatusMessage} />
               </Form>
             )}
           </Formik>

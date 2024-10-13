@@ -11,12 +11,15 @@ import Categories from './pages/Categories';
 import { useDispatch, useSelector } from 'react-redux';
 import { handleGetPosts } from './features/postDataSlice';
 import { useEffect } from 'react';
-import { fetchUserData } from './features/userDataSlice'; // Import aksi fetchUserData
+import { handleRefetchUser } from './features/userDataSlice'; // Import aksi handleRefetchUser
+import { handleGetCategories } from './features/categoryDataSlice';
 
 const App = () => {
   const dispatch = useDispatch();
   const search = useSelector((state) => state.sharedData.searchQuery); // Ambil data search dari Redux
   const getPostsStatus = useSelector((state) => state.postData.getPostsStatus);
+  const refetchUserStatus = useSelector((state) => state.userData.refetchUserStatus);
+  const getCategoriesStatus =  useSelector((state) => state.categoryData.getCategoriesStatus);
 
   const getPostsData = async (search) => {
     dispatch(handleGetPosts(search));
@@ -37,8 +40,19 @@ const App = () => {
   }, [search, dispatch]);
 
   useEffect(() => {
-    dispatch(fetchUserData());
+    dispatch(handleRefetchUser());
   }, [dispatch])
+  
+
+  useEffect(() => {
+    if(getCategoriesStatus === 'idle'){
+      dispatch(handleGetCategories());
+    }
+  }, [dispatch]);
+
+  if(refetchUserStatus === 'loading'){
+    return <p>loading...</p>
+  }
   
   return (
       <Routes>

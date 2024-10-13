@@ -1,5 +1,5 @@
 // ini adalah logika redux
-import { getPosts, createPost, editPost, deletePost, uploadFile, getPost } from "../request";
+import { getPosts, createPost, editPost, deletePost, uploadFile, getPost, getPostsByUser } from "../request";
 import {
   createSlice,
   createAsyncThunk, // untuk menghandle opearasi asinkronus
@@ -8,6 +8,7 @@ import {
 
 export const handleGetPost = createAsyncThunk("getPost", getPost);
 export const handleGetPosts = createAsyncThunk("getPosts", getPosts);
+export const handleGetPostsByUser = createAsyncThunk("getPostsByUser", getPostsByUser);
 export const handleCreatePost = createAsyncThunk("createPost", createPost);
 export const handleEditPost = createAsyncThunk("editPost", editPost);
 export const handleDeletePost = createAsyncThunk("deletePost", deletePost);
@@ -21,62 +22,88 @@ const postDataSlice = createSlice({
   name: "postData",
   initialState: {
     ...postEntity.getInitialState(),
+    getPostByUser: [],
     getPostsStatus: 'idle',
+    getPostsByUserStatus: 'idle',
     createPostStatus: 'idle',
+    createPostImageStatus: 'idle',
     deletePostStatus: 'idle',
     editPostStatus: 'idle',
-    getPostsErrorMessage: null,
-    createPostErrorMessage: null,
-    deletePostErrorMessage: null,
-    editPostErrorMessage: null,
+    getPostsByUserStatusMessage: null,
+    getPostsStatusMessage: null,
+    createPostStatusMessage: null,
+    createPostImageStatusMessage: null,
+    deletePostStatusMessage: null,
+    editPostStatusMessage: null,
     getPostsDetail:{}, // untuk get post secara satu per satu
     getPostsDetailStatus:{}, // untuk get post secara satu per satu
-    getPostsDetailErrorMessage:{} // untuk get post secara satu per satu
+    getPostsDetailStatusMessage:{} // untuk get post secara satu per satu
   },
   reducers: {
     resetCreatePostStatus: (state) => {
       state.createPostStatus = 'idle';
-      state.createPostErrorMessage = null;
+      state.createPostStatusMessage = null;
+    },
+    resetCreatePostImageStatus: (state) => {
+      state.createPostImageStatus = 'idle';
+      state.createPostImageStatusMessage = null;
     },
     resetEditPostStatus: (state) => {
       state.editPostStatus = 'idle';
-      state.editPostErrorMessage = null;
+      state.editPostStatusMessage = null;
     },
     resetDeletePostStatus: (state) => {
       state.deletePostStatus = 'idle';
-      state.deletePostErrorMessage = null;
+      state.deletePostStatusMessage = null;
     },
     resetGetPostsStatus: (state) => {
       state.getPostsStatus = 'idle';
-      state.getPostsErrorMessage = null;
+      state.getPostsStatusMessage = null;
     },
   },
   extraReducers: (builder) => {
     builder // untuk menangani aksi asyncrhonus
+
+      //aksi get posts
+      .addCase(handleGetPosts.pending, (state, action) => {
+        state.getPostsStatus = 'loading';
+      })
+      .addCase(handleGetPosts.fulfilled, (state, action) => {
+        postEntity.setAll(state, action.payload.data);
+        state.getPostsStatusMessage = action.payload.message;
+        state.getPostsStatus = 'succeeded';
+      })
+      .addCase(handleGetPosts.rejected, (state, action) => {
+        state.getPostsStatus = 'failed';
+        state.getPostsStatusMessage = action.error.message;
+      })
+
       //aksi get post
       .addCase(handleGetPost.pending, (state, action) => {
         state.getPostsDetailStatus[action.meta.arg] = 'loading'; // tidak bisa karena ketika loading data payload blum ada
       })
       .addCase(handleGetPost.fulfilled, (state, action) => {
         state.getPostsDetailStatus[action.meta.arg] = 'succeeded';
-        state.getPostsDetail[action.meta.arg] = action.payload;
+        state.getPostsDetail[action.meta.arg] = action.payload.data;
+        state.getPostsDetailStatusMessage[action.meta.arg] = action.payload.message;
       })
       .addCase(handleGetPost.rejected, (state, action) => {
         state.getPostsDetailStatus[action.meta.arg] = 'failed';
-        state.getPostsDetailErrorMessage[action.meta.arg] = action.error.message;
+        state.getPostsDetailStatusMessage[action.meta.arg] = action.error.message;
       })
-          
-      //aksi get posts
-      .addCase(handleGetPosts.pending, (state, action) => {
-        state.getPostsStatus = 'loading';
+    
+      //aksi get posts by user
+      .addCase(handleGetPostsByUser.pending, (state, action) => {
+        state.getPostsByUserStatus = 'loading';
       })
-      .addCase(handleGetPosts.fulfilled, (state, action) => {
-        postEntity.setAll(state, action.payload);
-        state.getPostsStatus = 'succeeded';
+      .addCase(handleGetPostsByUser.fulfilled, (state, action) => {
+        state.getPostsByUserStatus = 'succeeded';
+        state.getPostByUser = action.payload.data;
+        state.getPostsByUserStatusMessage = action.payload.message;
       })
-      .addCase(handleGetPosts.rejected, (state, action) => {
-        state.getPostsStatus = 'failed';
-        state.getPostsErrorMessage = action.error.message;
+      .addCase(handleGetPostsByUser.rejected, (state, action) => {
+        state.getPostsByUserStatus = 'failed';
+        state.getPostsByUserStatusMessage = action.error.message;
       })
 
       //aksi create post
@@ -86,11 +113,12 @@ const postDataSlice = createSlice({
       .addCase(handleCreatePost.fulfilled, (state, action) => {
         state.createPostStatus = 'succeeded';
         state.getPostsStatus = 'idle';
+        state.createPostStatusMessage = action.payload.message;
         // postEntity.addOne(state, action.payload); // Menambahkan produk yang baru disimpan secara langsung tanpa perlu get API
       })
       .addCase(handleCreatePost.rejected, (state, action) => {
         state.createPostStatus = 'failed';
-        state.createPostErrorMessage = action.error.message;
+        state.createPostStatusMessage = action.error.message;
       })
 
        // Aksi `update post`
@@ -100,10 +128,11 @@ const postDataSlice = createSlice({
       .addCase(handleEditPost.fulfilled, (state, action) => {
         state.editPostStatus = 'succeeded';
         state.getPostsStatus = 'idle';
+        state.editPostStatusMessage = action.payload.message;
       })
       .addCase(handleEditPost.rejected, (state, action) => {
         state.editPostStatus = 'failed';
-        state.editPostErrorMessage = action.error.message;
+        state.editPostStatusMessage = action.error.message;
       })
 
       //aksi delete post
@@ -113,11 +142,26 @@ const postDataSlice = createSlice({
       .addCase(handleDeletePost.fulfilled, (state, action) => {
         state.deletePostStatus = 'succeeded';
         state.getPostsStatus = 'idle';
+        state.deletePostStatusMessage = action.payload.message;
         // postEntity.removeOne(state, action.payload); // Menghapus produk berdasarkan ID secara langsung tanpa perlu get API
       })
       .addCase(handleDeletePost.rejected, (state, action) => {
         state.deletePostStatus = 'failed';
-        state.deletePostErrorMessage = action.error.message;
+        state.deletePostStatusMessage = action.error.message;
+      })
+
+      // Aksi `upload file`
+      .addCase(handleUploadFile.pending, (state) => {
+        state.createPostImageStatus = 'loading';
+      })
+      .addCase(handleUploadFile.fulfilled, (state, action) => {
+        state.createPostImageStatus = 'succeeded';
+        state.getPostsStatus = 'idle';
+        state.createPostImageStatusMessage = action.payload.message;
+      })
+      .addCase(handleUploadFile.rejected, (state, action) => {
+        state.createPostImageStatus = 'failed';
+        state.createPostImageStatusMessage = action.error.message;
       })
   },
 });
@@ -128,6 +172,6 @@ export const postSelectors = postEntity.getSelectors(
   }
 );
 
-export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus } = postDataSlice.actions;
+export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus, resetCreatePostImageStatus } = postDataSlice.actions;
 
 export default postDataSlice.reducer;

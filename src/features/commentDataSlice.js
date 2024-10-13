@@ -17,24 +17,24 @@ const commentDataSlice = createSlice({
   initialState: {
     commentsByPostId: {}, // Object of arrays { postId: [comments] }
     getCommentsStatus: {},
-    getCommentsErrorMessage: {},
-    createCommentErrorMessage: null,
-    deleteCommentErrorMessage: null,
+    getCommentsStatusMessage: {},
+    createCommentStatusMessage: null,
+    deleteCommentStatusMessage: null,
     createCommentStatus: 'idle',
     deleteCommentStatus: 'idle',
   },
   reducers: {
     resetCreateCommentStatus: (state) => {
       state.createCommentStatus = 'idle';
-      state.createCommentErrorMessage = null;
+      state.createCommentStatusMessage = null;
     },
     resetDeleteCommentStatus: (state) => {
       state.deleteCommentStatus = 'idle';
-      state.deleteCommentErrorMessage = null;
+      state.deleteCommentStatusMessage = null;
     },
     resetGetCommentsStatus: (state) => {
       state.getCommentsStatus = {};
-      state.getCommentsErrorMessage = {};
+      state.getCommentsStatusMessage = {};
     },
   },
   extraReducers: (builder) => {
@@ -44,12 +44,13 @@ const commentDataSlice = createSlice({
         state.getCommentsStatus[action.meta.arg] = 'loading'; //[action.meta.arg argument yang dikiri ke function get API
       })
       .addCase(handleGetComments.fulfilled, (state, action) => {
-        state.commentsByPostId[action.meta.arg] = action.payload; 
+        state.commentsByPostId[action.meta.arg] = action.payload.data; 
         state.getCommentsStatus[action.meta.arg] = 'succeeded';
+        state.getCommentsStatusMessage[action.meta.arg] = action.payload.message;
       })
       .addCase(handleGetComments.rejected, (state, action) => {
         state.getCommentsStatus[action.meta.arg] = 'failed';
-        state.getCommentsErrorMessage[action.meta.arg] = action.error.message;
+        state.getCommentsStatusMessage[action.meta.arg] = action.error.message;
       })
 
       // Handle create comment
@@ -58,10 +59,11 @@ const commentDataSlice = createSlice({
       })
       .addCase(handleCreateComment.fulfilled, (state, action) => {
         state.createCommentStatus = 'succeeded';
+        state.createCommentStatusMessage = action.payload.message;
       })
       .addCase(handleCreateComment.rejected, (state, action) => {
         state.createCommentStatus = 'failed';
-        state.createCommentErrorMessage = action.error.message;
+        state.createCommentStatusMessage = action.error.message;
       })
 
       // Handle delete comment
@@ -70,10 +72,11 @@ const commentDataSlice = createSlice({
       })
       .addCase(handleDeleteComment.fulfilled, (state, action) => {
         state.deleteCommentStatus = 'succeeded';
+        state.deleteCommentStatusMessage = action.payload.message;
       })
       .addCase(handleDeleteComment.rejected, (state, action) => {
         state.deleteCommentStatus = 'failed';
-        state.deleteCommentErrorMessage = action.error.message;
+        state.deleteCommentStatusMessage = action.error.message;
       });
   },
 });

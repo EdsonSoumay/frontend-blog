@@ -3,45 +3,117 @@ import { URL } from "../url";
 
 // auth and user
 export const register = async (data) =>{
-    const result = await axios.post(URL+"/api/auth/register",data)
-    return result.data;
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result = await axios.post(URL+"/api/auth/register",data)
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1500);
+  });
 }
 
 export const login = async(data) =>{
-    const result =await axios.post(URL+"/api/auth/login",data,{withCredentials:true})
-    return result.data;
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result =await axios.post(URL+"/api/auth/login",data,{withCredentials:true})
+          resolve(result.data); 
+        } catch (error) {
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
+        }
+      }, 1500);
+    });
 }
 
 export const logout = async()=>{
-    const result  = await axios.get(URL+"/api/auth/logout",{withCredentials:true})
-    return result.data;
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result  = await axios.get(URL+"/api/auth/logout",{withCredentials:true})
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1000);
+  });
 }
 
 export const refetch = async()=>{
-    const result = await axios.get(URL+"/api/auth/refetch",{withCredentials:true})
-    return result.data;
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result = await axios.get(URL+"/api/auth/refetch",{withCredentials:true})
+          resolve(result.data);
+        } catch (error) {
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
+        }
+      }, 1000);
+    });
 }
 
 export const getProfileUser = async(user_id)=>{
-    const result = await axios.get(URL+"/api/users/"+ user_id, {withCredentials:true})
-    return result.data;
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result = await axios.get(URL+"/api/users/"+ user_id, {withCredentials:true})
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1000);
+  });
 }
 
-export const updateProfileUser = async(user_id, data)=>{
-    const result =  await axios.put(URL+"/api/users/"+user_id, data, {withCredentials:true})
-    return result.data;
+export const updateProfileUser = async({user_id, data})=>{
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result =  await axios.put(URL+"/api/users/"+user_id, data, {withCredentials:true})
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1000);
+  });
 }
 
 export const deleteProfileUser = async(user_id)=>{
-   const result = await axios.delete(URL+"/api/users/"+user_id,{withCredentials:true})
-   return result.data;
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result = await axios.delete(URL+"/api/users/"+user_id,{withCredentials:true})
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1000);
+  });
 }
 //=======================================================================================================
 
 //post 
 export const getPostsByUser = async(user_id)=>{
-    const result =await axios.get(URL+"/api/posts/user/"+user_id, {withCredentials:true})
-    return result.data;
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result =await axios.get(URL+"/api/posts/user/"+user_id, {withCredentials:true})
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1000);
+  });
 }
 
 export const getPosts = async (search) => {
@@ -56,9 +128,10 @@ export const getPosts = async (search) => {
           });
           resolve(result.data || []); 
         } catch (error) {
-          reject(error); 
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
         }
-      }, 400);
+      }, 4000);
     });
   }
   
@@ -68,18 +141,28 @@ export const getPost = async (post_id) => {
     setTimeout(async () => {
       try {
         const result = await axios.get(`${URL}/api/posts/${post_id}`, { withCredentials: true });
-        resolve(result.data); // Mengembalikan data produk
+        resolve(result.data);
       } catch (error) {
-        reject(error); // Menangani error jika permintaan gagal
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
       }
-    }, 1500); // Simulasi keterlambatan 1.5 detik
+    }, 1500);
   });
 };
 
 
 export const uploadFile = async(data)=>{
-    const result = await axios.post(URL+"/api/upload",data)
-    return result.data;
+    return new Promise((resolve, reject) => {
+      setTimeout(async () => {
+        try {
+          const result = await axios.post(URL+"/api/upload",data, { withCredentials: true })
+          resolve(result.data);
+        } catch (error) {
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
+        }
+      }, 1500);
+    });
 }
 
 export const createPost = async(post)=>{
@@ -87,11 +170,12 @@ export const createPost = async(post)=>{
         setTimeout(async () => {
           try {
             const result = await axios.post(URL+"/api/posts/create",post,{withCredentials:true})
-            resolve(result.data); // Mengembalikan data produk
+            resolve(result.data);
           } catch (error) {
-            reject(error); // Menangani error jika permintaan gagal
+            const errorResponse = error?.response?.data?.message || error.message;
+            reject(errorResponse);
           }
-        }, 1500); // Simulasi keterlambatan 1.5 detik
+        }, 1500);
       });
 }
 
@@ -100,11 +184,12 @@ export const editPost = async({post_id, post})=>{
         setTimeout(async () => {
           try {
             const result = await axios.put(URL+"/api/posts/"+post_id,post,{withCredentials:true})
-            resolve(result.data); // Mengembalikan data produk
+            resolve(result.data);
           } catch (error) {
-            reject(error); // Menangani error jika permintaan gagal
+            const errorResponse = error?.response?.data?.message || error.message;
+            reject(errorResponse);
           }
-        }, 1500); // Simulasi keterlambatan 1.5 detik
+        }, 1500);
       });
 }
 
@@ -113,11 +198,12 @@ export const deletePost = async(post_id)=>{
     setTimeout(async () => {
       try {
         const result = await axios.delete(URL+"/api/posts/"+post_id,{withCredentials:true})
-        resolve(result.data); // Mengembalikan data produk
+        resolve(result.data);
       } catch (error) {
-        reject(error); // Menangani error jika permintaan gagal
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
       }
-    }, 1500); // Simulasi keterlambatan 1.5 detik
+    }, 1500);
   });
 }
 //=======================================================================================================
@@ -129,9 +215,10 @@ export const getComments = async(post_id)=>{
       setTimeout(async () => {
         try {
           const result = await axios.get(URL+"/api/comments/post/"+post_id, {withCredentials:true})
-          resolve(result.data); // Mengembalikan data produk
+          resolve(result.data);
         } catch (error) {
-          reject(error); // Menangani error jika permintaan gagal
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
         }
       }, 2500); // Simulasi keterlambatan 5.5 detik
     });
@@ -142,11 +229,12 @@ export const createComment = async (data)=>{
     setTimeout(async () => {
       try {
         const result =  await axios.post(URL+"/api/comments/create", data, {withCredentials:true})
-        resolve(result.data); // Mengembalikan data produk
+        resolve(result.data);
       } catch (error) {
-        reject(error); // Menangani error jika permintaan gagal
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
       }
-    }, 2500); // Simulasi keterlambatan 1.5 detik
+    }, 2500);
   });
 }
 
@@ -155,9 +243,10 @@ export const deleteComment = async (commentId)=>{
       setTimeout(async () => {
         try {
           const result =  await axios.delete(URL+"/api/comments/"+commentId,{withCredentials:true})
-          resolve(result.data); // Mengembalikan data produk
+          resolve(result.data);
         } catch (error) {
-          reject(error.response.data); // Menangani error jika permintaan gagal
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
         }
       }, 10000); // Simulasi keterlambatan 10 detik
     });
@@ -171,11 +260,12 @@ export const getCategories = async()=>{
       setTimeout(async () => {
         try {
           const result = await axios.get(URL + "/api/category", { withCredentials: true });
-          resolve(result.data); // Mengembalikan data produk
+          resolve(result.data);
         } catch (error) {
-          reject(error); // Menangani error jika permintaan gagal
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
         }
-      }, 1500); // Simulasi keterlambatan 1.5 detik
+      }, 1500);
     });
 }
 
@@ -184,10 +274,25 @@ export const createCategory = async(data)=>{
       setTimeout(async () => {
         try {
           const result = await axios.post(URL + "/api/category/create",data,{ withCredentials: true });
-          resolve(result.data); // Mengembalikan data produk
+          resolve(result.data);
         } catch (error) {
-          reject(error); // Menangani error jika permintaan gagal
+          const errorResponse = error?.response?.data?.message || error.message;
+          reject(errorResponse);
         }
-      }, 1500); // Simulasi keterlambatan 1.5 detik
+      }, 1500);
     });
+}
+
+export const deleteCategory = async(id)=>{
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      try {
+        const result = await axios.delete(URL +`/api/category/${id}`,{ withCredentials: true });
+        resolve(result.data);
+      } catch (error) {
+        const errorResponse = error?.response?.data?.message || error.message;
+        reject(errorResponse);
+      }
+    }, 1500);
+  });
 }

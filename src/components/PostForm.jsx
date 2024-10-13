@@ -1,24 +1,11 @@
 import { Field, ErrorMessage } from 'formik';
-import { useState, useEffect, Fragment } from 'react';
-import { getCategories } from '../request';
+import {Fragment } from 'react';
+import { categorySelectors } from "../features/categoryDataSlice";
+import { useSelector } from 'react-redux';
 
 const PostForm = ({ formProps }) => {
-    const [categories, setCategories] = useState([]);
-
-    // Fetch categories for the select field
-    const fetchCategories = async () => {
-      try {
-        const res = await getCategories();
-        setCategories(res);
-      } catch (err) {
-        console.log(err);
-      }
-    };
+  const categories = useSelector(categorySelectors.selectAll);
   
-    useEffect(() => {
-      fetchCategories();
-    }, []);
-    
   return (
   <Fragment>
     {/* Title Field */}
@@ -41,6 +28,7 @@ const PostForm = ({ formProps }) => {
         <input
           name="file"
           type="file"
+          accept="image/*"
           onChange={(e) => formProps.setFieldValue('file', e.target.files[0])}
           className="px-4 py-2 w-full outline-none border border-gray-300 rounded-md"
         />

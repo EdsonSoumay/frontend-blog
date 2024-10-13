@@ -2,22 +2,22 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleCreatePost, handleUploadFile, resetCreatePostStatus } from '../features/postDataSlice';
+import { handleCreatePost, handleUploadFile, resetCreatePostStatus, resetCreatePostImageStatus } from '../features/postDataSlice';
 import { Formik } from 'formik';
 import PostForm from '../components/PostForm';
 import { PostValidationSchema, PostInitialValues } from '../functions/PostHelper';
 import SubmitButton from '../components/SubmitButton';
 import { Form } from 'formik';
 
-
 const CreatePost = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.userData.user); // Mengambil user dari Redux store
+  console.log("user:",user)
 
   const navigate = useNavigate();
 
   const createPostStatus = useSelector((state) => state.postData.createPostStatus);
-  const createPostErrorMessage = useSelector((state) => state.postData.createPostErrorMessage);
+  const createPostStatusMessage = useSelector((state) => state.postData.createPostStatusMessage);
 
   // Handle post creation
   const handleCreate = async (values) => {
@@ -32,9 +32,23 @@ const CreatePost = () => {
       post.photo = filename;
 
       try {
-        await dispatch(handleUploadFile(data));
+       const resultAction = await dispatch(handleUploadFile(data));
+        if (handleUploadFile.fulfilled.match(resultAction)){
+            setTimeout(() => {
+              navigate("/"); // Kembali ke halaman utama jika sukses
+              dispatch(resetCreatePostImageStatus());
+            }, 2000);
+        }
+        // Jika ada error (rejected), tampilkan error dari resultAction
+        else if (handleUploadFile.rejected.match(resultAction)){
+          setTimeout(() => {
+            dispatch(resetCreatePostImageStatus());
+          }, 2000);
+        }
       } catch (err) {
-        console.log(err);
+        setTimeout(() => {
+          dispatch(resetCreatePostImageStatus());
+        }, 2000);
       }
     }
 
@@ -68,7 +82,7 @@ const CreatePost = () => {
           {(formProps) => (
            <Form className="w-full flex flex-col space-y-4 md:space-y-8 mt-4">
             <PostForm formProps={formProps} />
-            <SubmitButton status={createPostStatus} errorMessage={createPostErrorMessage}/>
+            <SubmitButton status={createPostStatus} statusMessage={createPostStatusMessage}/>
            </Form>
           )}
         </Formik>
