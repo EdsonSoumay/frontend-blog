@@ -2,7 +2,7 @@ import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { handleEditPost, handleUploadFile, resetEditPostStatus, resetCreatePostImageStatus } from "../features/postDataSlice";
+import { handleEditPost, handleUploadFile, resetEditPostStatus, resetPostImageStatus } from "../features/postDataSlice";
 import PostForm from "../components/PostForm";
 import { Formik, Form } from "formik";
 import { PostValidationSchema, PostInitialValues } from "../functions/PostHelper";
@@ -38,18 +38,18 @@ const EditPost = () => {
          if (handleUploadFile.fulfilled.match(resultAction)){
              setTimeout(() => {
                navigate("/"); // Kembali ke halaman utama jika sukses
-               dispatch(resetCreatePostImageStatus());
+               dispatch(resetPostImageStatus());
              }, 2000);
          }
          // Jika ada error (rejected), tampilkan error dari resultAction
          else if (handleUploadFile.rejected.match(resultAction)){
            setTimeout(() => {
-             dispatch(resetCreatePostImageStatus());
+             dispatch(resetPostImageStatus());
            }, 2000);
          }
        } catch (err) {
          setTimeout(() => {
-           dispatch(resetCreatePostImageStatus());
+           dispatch(resetPostImageStatus());
          }, 2000);
        }
     }
@@ -60,7 +60,7 @@ const EditPost = () => {
       if (handleEditPost.fulfilled.match(resultAction)){
         // console.log("Produk berhasil disimpan:", resultAction.payload);
           setTimeout(() => {
-            // navigate("/"); // Kembali ke halaman utama jika sukses
+            navigate("/"); // Kembali ke halaman utama jika sukses
             dispatch(resetEditPostStatus());
           }, 2000);
       }

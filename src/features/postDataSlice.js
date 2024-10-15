@@ -44,9 +44,9 @@ const postDataSlice = createSlice({
       state.createPostStatus = 'idle';
       state.createPostStatusMessage = null;
     },
-    resetCreatePostImageStatus: (state) => {
-      state.createPostImageStatus = 'idle';
-      state.createPostImageStatusMessage = null;
+    resetPostImageStatus: (state) => {
+      state.postImageStatus = 'idle';
+      state.postImageStatusMessage = null;
     },
     resetEditPostStatus: (state) => {
       state.editPostStatus = 'idle';
@@ -59,6 +59,9 @@ const postDataSlice = createSlice({
     resetGetPostsStatus: (state) => {
       state.getPostsStatus = 'idle';
       state.getPostsStatusMessage = null;
+    },
+    setPosts: (state, action) => {
+      postEntity.setAll(state, action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -171,6 +174,6 @@ export const postSelectors = postEntity.getSelectors(
   }
 );
 
-export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus, resetCreatePostImageStatus } = postDataSlice.actions;
+export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus, resetPostImageStatus, setPosts } = postDataSlice.actions;
 
 export default postDataSlice.reducer;

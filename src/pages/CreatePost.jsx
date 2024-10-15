@@ -2,7 +2,7 @@ import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { handleCreatePost, handleUploadFile, resetCreatePostStatus, resetCreatePostImageStatus } from '../features/postDataSlice';
+import { handleCreatePost, handleUploadFile, resetCreatePostStatus, resetPostImageStatus } from '../features/postDataSlice';
 import { Formik } from 'formik';
 import PostForm from '../components/PostForm';
 import { PostValidationSchema, PostInitialValues } from '../functions/PostHelper';
@@ -34,18 +34,18 @@ const CreatePost = () => {
         if (handleUploadFile.fulfilled.match(resultAction)){
             setTimeout(() => {
               navigate("/"); // Kembali ke halaman utama jika sukses
-              dispatch(resetCreatePostImageStatus());
+              dispatch(resetPostImageStatus());
             }, 2000);
         }
         // Jika ada error (rejected), tampilkan error dari resultAction
         else if (handleUploadFile.rejected.match(resultAction)){
           setTimeout(() => {
-            dispatch(resetCreatePostImageStatus());
+            dispatch(resetPostImageStatus());
           }, 2000);
         }
       } catch (err) {
         setTimeout(() => {
-          dispatch(resetCreatePostImageStatus());
+          dispatch(resetPostImageStatus());
         }, 2000);
       }
     }

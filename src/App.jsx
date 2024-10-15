@@ -13,6 +13,9 @@ import { handleGetPosts } from './features/postDataSlice';
 import { useEffect } from 'react';
 import { handleRefetchUser } from './features/userDataSlice'; // Import aksi handleRefetchUser
 import { handleGetCategories } from './features/categoryDataSlice';
+import socket from './infrastructure/socket';
+import { setPosts } from './features/postDataSlice';
+import { SocketListener } from './functions/SocketHelper';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -24,6 +27,13 @@ const App = () => {
   const getPostsData = async (search) => {
     dispatch(handleGetPosts(search));
   }
+
+  useEffect(() => {
+    SocketListener('all-posts',setPosts, dispatch);
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   useEffect(() => {
     //dirender ulang ketika ada post baru atau ada post yang diupdate
@@ -41,14 +51,12 @@ const App = () => {
 
   useEffect(() => {
     dispatch(handleRefetchUser());
-  }, [dispatch])
-  
-
-  useEffect(() => {
     if(getCategoriesStatus === 'idle'){
       dispatch(handleGetCategories());
     }
-  }, [dispatch]);
+  }, [dispatch])
+
+
 
   if(refetchUserStatus === 'loading'){
     return <p>loading...</p>
