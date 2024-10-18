@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from "react-redux"; // Import Redux hooks
 import { handleGetPostsByUser } from "../features/postDataSlice";
 import { handleUpdateProfileUser } from "../features/userDataSlice";
 import Loader from "../components/Loader";
+import { SocketListenerRoom } from "../functions/SocketHelper";
+import { setPostsByUser } from "../features/postDataSlice";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -37,6 +39,13 @@ const Profile = () => {
       console.log("err:",err)
     }
   };
+
+  // Gunakan di dalam useEffect
+  useEffect(() => {
+    if(user){
+      SocketListenerRoom(`userId-${user?.id}`,`${user?.id}-all-posts`, setPostsByUser, dispatch);
+    }
+  }, [user]);
 
   useEffect(() => {
     if (getPostsByUserStatus === "idle" && user) {

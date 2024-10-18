@@ -34,6 +34,9 @@ const categoryDataSlice = createSlice({
       state.getCategoriesStatus = 'idle';
       state.getCategoriesStatusMessage = null;
     },
+    setCategories:(state, action) => {
+      categoryEntity.setAll(state, action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder // untuk menangani aksi asyncrhonus
@@ -87,6 +90,6 @@ export const categorySelectors = categoryEntity.getSelectors(
   }
 );
 
-export const { resetCreateCategoryStatus,  resetGetCategoriesStatus } = categoryDataSlice.actions;
+export const { resetCreateCategoryStatus,  resetGetCategoriesStatus, setCategories } = categoryDataSlice.actions;
 
 export default categoryDataSlice.reducer;

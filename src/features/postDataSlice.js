@@ -63,6 +63,9 @@ const postDataSlice = createSlice({
     setPosts: (state, action) => {
       postEntity.setAll(state, action.payload);
     },
+    setPostsByUser: (state, action) => {
+      state.getPostByUser = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder // untuk menangani aksi asyncrhonus
@@ -174,6 +177,6 @@ export const postSelectors = postEntity.getSelectors(
   }
 );
 
-export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus, resetPostImageStatus, setPosts } = postDataSlice.actions;
+export const { resetCreatePostStatus, resetEditPostStatus, resetDeletePostStatus, resetGetPostsStatus, resetPostImageStatus, setPosts, setPostsByUser } = postDataSlice.actions;
 
 export default postDataSlice.reducer;

@@ -15,7 +15,8 @@ import { handleRefetchUser } from './features/userDataSlice'; // Import aksi han
 import { handleGetCategories } from './features/categoryDataSlice';
 import socket from './infrastructure/socket';
 import { setPosts } from './features/postDataSlice';
-import { SocketListener } from './functions/SocketHelper';
+import { SocketListenerGlobal } from './functions/SocketHelper';
+import { setCategories } from './features/categoryDataSlice';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -29,7 +30,8 @@ const App = () => {
   }
 
   useEffect(() => {
-    SocketListener('all-posts',setPosts, dispatch);
+    SocketListenerGlobal('all-posts',setPosts, dispatch);
+    SocketListenerGlobal('all-categories',setCategories, dispatch);
     return () => {
       socket.disconnect();
     };

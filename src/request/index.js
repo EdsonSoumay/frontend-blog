@@ -112,7 +112,7 @@ export const getPostsByUser = async(user_id)=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 
