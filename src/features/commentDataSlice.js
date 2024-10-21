@@ -36,6 +36,9 @@ const commentDataSlice = createSlice({
       state.getCommentsStatus = {};
       state.getCommentsStatusMessage = {};
     },
+    setCommentsByPost: (state, action) => {
+      state.commentsByPostId[action.payload[0].post_id] = action.payload; 
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -97,6 +100,7 @@ export const {
   resetCreateCommentStatus,
   resetDeleteCommentStatus,
   resetGetCommentsStatus,
+  setCommentsByPost
 } = commentDataSlice.actions;
 
 export default commentDataSlice.reducer;

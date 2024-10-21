@@ -22,12 +22,9 @@ const Categories = () => {
     if (!category_description) {
       return null;
     }
-  
     categoryDescriptionRef.current.value = '';
-  
     try {
       await dispatch(handleCreateCategory({ category_description }));
-      window.location.reload(true);
     } catch (err) {
       console.log(err);
     }
@@ -36,7 +33,6 @@ const Categories = () => {
   const deleteCategory = async (categoryId) => {
     try {
       await dispatch(handleDeleteCategory(categoryId));
-      window.location.reload(true);
     } catch (err) {
       console.log(err);
     }

@@ -11,7 +11,8 @@ import { IF } from "../url"
 import Loader from "../components/Loader"
 import { useDispatch, useSelector } from "react-redux";
 import { handleDeletePost, handleGetPost, resetDeletePostStatus } from "../features/postDataSlice"
-import { handleCreateComment, handleGetComments, selectCommentsByPostId } from "../features/commentDataSlice"
+import { handleCreateComment, handleGetComments, selectCommentsByPostId, setCommentsByPost } from "../features/commentDataSlice"
+import { SocketListenerRoom } from "../functions/SocketHelper";
 
 const PostDetails = () => {
   const dispatch = useDispatch();
@@ -69,7 +70,6 @@ const PostDetails = () => {
     commentRef.current.value = '';
     try {
       await dispatch(handleCreateComment({comment, post_id, user_id: user.id}));
-      window.location.reload(true)
       } catch (err) {
         console.log(err);
       }
@@ -84,6 +84,14 @@ const PostDetails = () => {
   useEffect(()=>{
     dispatch(handleGetComments(post_id));
   },[post_id])
+
+  
+  // Gunakan di dalam useEffect
+  useEffect(() => {
+    if(post_id){
+      SocketListenerRoom(`postId-${post_id}`,`${post_id}-all-comments`, setCommentsByPost, dispatch);
+    }
+  }, [post_id]);
 
   return (
     <div>

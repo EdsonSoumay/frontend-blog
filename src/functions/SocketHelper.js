@@ -1,9 +1,9 @@
 import socket from "../infrastructure/socket";
 
 const SocketListenerGlobal = (nameListener, ReduxAction, dispatch) => {
-
     // Set up the socket listener for incoming data
     socket.on(nameListener, (data) => {
+      console.log("data:",data)
       dispatch(ReduxAction(data)); // Use the new action to set all posts
     });
 
@@ -25,6 +25,12 @@ const SocketListenerGlobal = (nameListener, ReduxAction, dispatch) => {
 
 
   const SocketListenerRoom = (nameRoom, nameListener, ReduxAction, dispatch) => {
+
+    console.log("socket listener room")
+
+    console.log("name room:",nameRoom)
+    console.log("name listener:",nameListener)
+
     // Emit untuk bergabung ke room
     socket.emit('joinRoom', nameRoom);
 

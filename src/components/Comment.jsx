@@ -2,6 +2,8 @@ import { MdDelete } from "react-icons/md"
 import { handleDeleteComment } from "../features/commentDataSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { resetDeleteCommentStatus } from "../features/commentDataSlice";
+import { SocketListenerRoom } from "../functions/SocketHelper";
+import { setCommentsByPost } from "../features/commentDataSlice";
 
 const Comment = ({c}) => {
   const dispatch = useDispatch();
@@ -24,8 +26,6 @@ const Comment = ({c}) => {
           dispatch(resetDeleteCommentStatus());
         }, 2000);
       }
-
-      window.location.reload(true)
     }
     catch(err){
       console.log(err)
