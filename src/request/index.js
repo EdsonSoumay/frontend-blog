@@ -12,7 +12,7 @@ export const register = async (data) =>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 
@@ -26,7 +26,7 @@ export const login = async(data) =>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000);
+      }, 2);
     });
 }
 
@@ -40,7 +40,7 @@ export const logout = async()=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 
@@ -54,7 +54,7 @@ export const refetch = async()=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000);
+      }, 2);
     });
 }
 
@@ -68,7 +68,7 @@ export const getProfileUser = async(user_id)=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 
@@ -82,7 +82,7 @@ export const updateProfileUser = async({user_id, data})=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 
@@ -96,7 +96,7 @@ export const deleteProfileUser = async(user_id)=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 //=======================================================================================================
@@ -131,7 +131,7 @@ export const getPosts = async (search) => {
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000);
+      }, 2);
     });
   }
   
@@ -146,7 +146,7 @@ export const getPost = async (post_id) => {
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 };
 
@@ -161,7 +161,7 @@ export const uploadFile = async(data)=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000);
+      }, 2);
     });
 }
 
@@ -175,7 +175,7 @@ export const createPost = async(post)=>{
             const errorResponse = error?.response?.data?.message || error.message;
             reject(errorResponse);
           }
-        }, 2000);
+        }, 2);
       });
 }
 
@@ -189,7 +189,7 @@ export const editPost = async({post_id, post})=>{
             const errorResponse = error?.response?.data?.message || error.message;
             reject(errorResponse);
           }
-        }, 2000);
+        }, 2);
       });
 }
 
@@ -203,7 +203,7 @@ export const deletePost = async(post_id)=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 //=======================================================================================================
@@ -220,7 +220,7 @@ export const getComments = async(post_id)=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000); // Simulasi keterlambatan 5.5 detik
+      }, 2); // Simulasi keterlambatan 5.5 detik
     });
 }
 
@@ -234,7 +234,7 @@ export const createComment = async (data)=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
 
@@ -248,7 +248,7 @@ export const deleteComment = async (commentId)=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000); // Simulasi keterlambatan 10 detik
+      }, 2); // Simulasi keterlambatan 10 detik
     });
 }
 //=======================================================================================================
@@ -265,7 +265,7 @@ export const getCategories = async()=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000);
+      }, 2);
     });
 }
 
@@ -279,7 +279,7 @@ export const createCategory = async(data)=>{
           const errorResponse = error?.response?.data?.message || error.message;
           reject(errorResponse);
         }
-      }, 2000);
+      }, 2);
     });
 }
 
@@ -293,6 +293,6 @@ export const deleteCategory = async(id)=>{
         const errorResponse = error?.response?.data?.message || error.message;
         reject(errorResponse);
       }
-    }, 2000);
+    }, 2);
   });
 }
